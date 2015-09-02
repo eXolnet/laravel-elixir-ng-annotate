@@ -5,7 +5,7 @@ Elixir wrapper around gulp-ng-annotate
 ## Install
 
 ```bash
-$ npm install --save-dev laravel-elixir-ng-annotate
+$ npm install --save laravel-elixir-ng-annotate
 ```
 
 ## Usage
@@ -31,14 +31,14 @@ This will annotate and concatenate all your Angular js files, then save the outp
 You can then apply the scripts tasks to the annotated.js as follows:
 
 ```js
-   mix.scripts('annotated.js','public/js/app.js', 'public/js/');
+mix.scripts('annotated.js','public/js/app.js', 'public/js/');
 ```
 
 Or chain it immediately
 
 ```js
-    elixir(function(mix) {
-       mix.annotate(appScripts).scripts('annotated.js','public/js/app.js', 'public/js/');
-    });
+elixir(function(mix) {
+   mix.annotate(appScripts).scripts('annotated.js','public/js/app.js', 'public/js/');
+});
 ```
 

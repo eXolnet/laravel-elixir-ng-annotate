@@ -5,18 +5,6 @@ var ngAnnotate = require('gulp-ng-annotate');
 var config = Elixir.config;
 var $ = Elixir.Plugins;
 
-
-/*
- |----------------------------------------------------------------
- | Stylus Compilation Task
- |----------------------------------------------------------------
- |
- | This task will compile your Stylus, including minification and
- | and auto-prefixing. Additionally it supports any postStylus
- | plugins that you want to include with your compilation.
- |
- */
-
 Elixir.extend('annotate', function(scripts, output, baseDir) {
   var paths = prepGulpPaths(scripts, baseDir, output);
 

@@ -1,17 +1,32 @@
 var gulp    = require('gulp');
 var Elixir = require('laravel-elixir');
 var ngAnnotate = require('gulp-ng-annotate');
+var sourcemaps = require("gulp-sourcemaps");
 
 var config = Elixir.config;
 var $ = Elixir.Plugins;
+
+
+/*
+ |----------------------------------------------------------------
+ | Stylus Compilation Task
+ |----------------------------------------------------------------
+ |
+ | This task will compile your Stylus, including minification and
+ | and auto-prefixing. Additionally it supports any postStylus
+ | plugins that you want to include with your compilation.
+ |
+ */
 
 Elixir.extend('annotate', function(scripts, output, baseDir) {
   var paths = prepGulpPaths(scripts, baseDir, output);
 
   new Elixir.Task('annotate', function () {
     return gulp.src(paths.src.path)
+        .pipe(sourcemaps.init())
         .pipe(ngAnnotate())
         .pipe($.concat(paths.output.name))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(paths.output.baseDir))
         .pipe(new Elixir.Notification('Scripts Annotated!'));
   })

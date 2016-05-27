@@ -1,7 +1,6 @@
 var gulp    = require('gulp');
 var Elixir = require('laravel-elixir');
 var ngAnnotate = require('gulp-ng-annotate');
-var sourcemaps = require("gulp-sourcemaps");
 
 var config = Elixir.config;
 var $ = Elixir.Plugins;
@@ -19,20 +18,20 @@ var $ = Elixir.Plugins;
  */
 
 Elixir.extend('annotate', function(scripts, output, baseDir) {
-  var paths = prepGulpPaths(scripts, baseDir, output);
+	var paths = prepGulpPaths(scripts, baseDir, output);
 
-  new Elixir.Task('annotate', function () {
-    return gulp.src(paths.src.path)
-        .pipe(sourcemaps.init())
-        .pipe(ngAnnotate())
-        .pipe($.concat(paths.output.name))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(paths.output.baseDir))
-        .pipe(new Elixir.Notification('Scripts Annotated!'));
-  })
-  .watch(paths.src.path)
-  .ignore(paths.output.path);
-
+	new Elixir.Task('annotate', function () {
+		return gulp.src(paths.src.path)
+			.pipe($.if(config.sourcemaps, $.sourcemaps.init()))
+			.pipe(ngAnnotate())
+			.pipe($.concat(paths.output.name))
+			.pipe($.if(config.production, $.uglify()))
+			.pipe($.if(config.sourcemaps, $.sourcemaps.write('.')))
+			.pipe(gulp.dest(paths.output.baseDir))
+			.pipe(new Elixir.Notification('Scripts Annotated!'));
+	})
+	.watch(paths.src.path)
+	.ignore(paths.output.path);
 });
 
 
@@ -44,7 +43,7 @@ Elixir.extend('annotate', function(scripts, output, baseDir) {
  * @param {string|null}  output
  */
 var prepGulpPaths = function(src, baseDir, output) {
-    return new Elixir.GulpPaths()
-        .src(src, baseDir || config.get('assets.js.folder'))
-        .output(output || config.get('public.js.outputFolder'), 'annotated.js');
+	return new Elixir.GulpPaths()
+		.src(src, baseDir || config.get('assets.js.folder'))
+		.output(output || config.get('public.js.outputFolder'), 'annotated.js');
 };
